@@ -1,4 +1,5 @@
 const net = require("net");
+const parser = require("./html-parser.js");
 
 class Response {
 
@@ -26,8 +27,8 @@ class TruckedBodyParser {
         }
         this.current = this.WAITING_LENGTH_LINE_END;
       } else {
-        this.length *= 10;
-        this.length += char.charCodeAt(0) - '0'.charCodeAt(0);
+        this.length *= 16;
+        this.length += parseInt(char, 16);
       }
     }
 
@@ -251,7 +252,8 @@ void async function() {
     body: { name: "artyhacker" },
   });
   const response = await request.send();
-  console.log(response);
+  console.log('RESPONSE:\n', response);
+  let dom = parser.parseHTML(response.body);
 }();
 
 
